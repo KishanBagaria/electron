@@ -41,7 +41,7 @@ const getHeaders = (filePath: string, fileName: string) => {
 };
 
 const targetRepo = releaseVersion.indexOf('nightly') > 0 ? 'nightlies' : 'electron';
-const uploadUrl = `https://uploads.github.com/repos/electron/${targetRepo}/releases/${releaseId}/assets{?name,label}`;
+const uploadUrl = `https://uploads.github.com/repos/KishanBagaria/${targetRepo}/releases/${releaseId}/assets{?name,label}`;
 let retry = 0;
 
 function uploadToGitHub () {
@@ -50,7 +50,7 @@ function uploadToGitHub () {
     headers: getHeaders(filePath, fileName),
     data: fs.createReadStream(filePath) as any,
     name: fileName,
-    owner: 'electron',
+    owner: 'KishanBagaria',
     repo: targetRepo,
     release_id: releaseId
   }).then(() => {
@@ -62,7 +62,7 @@ function uploadToGitHub () {
       retry++;
 
       octokit.repos.listReleaseAssets({
-        owner: 'electron',
+        owner: 'KishanBagaria',
         repo: targetRepo,
         release_id: releaseId,
         per_page: 100
@@ -74,7 +74,7 @@ function uploadToGitHub () {
         if (existingAssets.length > 0) {
           console.log(`${fileName} already exists; will delete before retrying upload.`);
           octokit.repos.deleteReleaseAsset({
-            owner: 'electron',
+            owner: 'KishanBagaria',
             repo: targetRepo,
             asset_id: existingAssets[0].id
           }).catch((deleteErr) => {

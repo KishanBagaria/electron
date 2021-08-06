@@ -43,7 +43,7 @@ const getTagsOf = async (point) => {
 
 const getTagsOnBranch = async (point) => {
   const { data: { default_branch: defaultBranch } } = await octokit.repos.get({
-    owner: 'electron',
+    owner: 'KishanBagaria',
     repo: 'electron'
   });
   const mainTags = await getTagsOf(defaultBranch);

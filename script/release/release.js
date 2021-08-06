@@ -36,7 +36,7 @@ let failureCount = 0;
 
 async function getDraftRelease (version, skipValidation) {
   const releaseInfo = await octokit.repos.listReleases({
-    owner: 'electron',
+    owner: 'KishanBagaria',
     repo: targetRepo
   });
 
@@ -271,7 +271,7 @@ async function createReleaseShasums (release) {
   if (existingAssets.length > 0) {
     console.log(`${fileName} already exists on GitHub; deleting before creating new file.`);
     await octokit.repos.deleteReleaseAsset({
-      owner: 'electron',
+      owner: 'KishanBagaria',
       repo: targetRepo,
       asset_id: existingAssets[0].id
     }).catch(err => {
@@ -291,7 +291,7 @@ async function createReleaseShasums (release) {
 }
 
 async function uploadShasumFile (filePath, fileName, releaseId) {
-  const uploadUrl = `https://uploads.github.com/repos/electron/${targetRepo}/releases/${releaseId}/assets{?name,label}`;
+  const uploadUrl = `https://uploads.github.com/repos/KishanBagaria/${targetRepo}/releases/${releaseId}/assets{?name,label}`;
   return octokit.repos.uploadReleaseAsset({
     url: uploadUrl,
     headers: {
@@ -328,7 +328,7 @@ function saveShaSumFile (checksums, fileName) {
 
 async function publishRelease (release) {
   return octokit.repos.updateRelease({
-    owner: 'electron',
+    owner: 'KishanBagaria',
     repo: targetRepo,
     release_id: release.id,
     tag_name: release.tag_name,
@@ -385,7 +385,7 @@ async function verifyDraftGitHubReleaseAssets (release) {
 
   const remoteFilesToHash = await Promise.all(release.assets.map(async asset => {
     const requestOptions = await octokit.repos.getReleaseAsset.endpoint({
-      owner: 'electron',
+      owner: 'KishanBagaria',
       repo: targetRepo,
       asset_id: asset.id,
       headers: {
