@@ -41,7 +41,7 @@ async function revertBumpCommit (tag) {
 async function deleteDraft (releaseId, targetRepo) {
   try {
     const result = await octokit.repos.getRelease({
-      owner: 'electron',
+      owner: 'KishanBagaria',
       repo: targetRepo,
       release_id: parseInt(releaseId, 10)
     });
@@ -50,7 +50,7 @@ async function deleteDraft (releaseId, targetRepo) {
       return false;
     } else {
       await octokit.repos.deleteRelease({
-        owner: 'electron',
+        owner: 'KishanBagaria',
         repo: targetRepo,
         release_id: result.data.id
       });
@@ -66,7 +66,7 @@ async function deleteDraft (releaseId, targetRepo) {
 async function deleteTag (tag, targetRepo) {
   try {
     await octokit.git.deleteRef({
-      owner: 'electron',
+      owner: 'KishanBagaria',
       repo: targetRepo,
       ref: `tags/${tag}`
     });
