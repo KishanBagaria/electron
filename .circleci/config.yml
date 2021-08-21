@@ -3,19 +3,19 @@ version: 2.1
 parameters:
   upload-to-s3:
     type: string
-    default: '1'
+    default: ''
 
   run-lint:
     type: boolean
-    default: true
+    default: false
 
   run-build-linux:
     type: boolean
-    default: true
+    default: false
 
   run-build-mac:
     type: boolean
-    default: true
+    default: false
 
   run-linux-x64-publish:
     type: boolean
@@ -55,7 +55,7 @@ parameters:
 
   run-macos-publish:
     type: boolean
-    default: false
+    default: true
 
 # Executors
 executors:
@@ -119,7 +119,7 @@ env-testing-build: &env-testing-build
 env-release-build: &env-release-build
   GN_CONFIG: //electron/build/args/release.gn
   STRIP_BINARIES: true
-  GENERATE_SYMBOLS: true
+  GENERATE_SYMBOLS: false
   CHECK_DIST_MANIFEST: '1'
   IS_RELEASE: true
 
@@ -277,6 +277,7 @@ step-depot-tools-add-to-path: &step-depot-tools-add-to-path
 step-gclient-sync: &step-gclient-sync
   run:
     name: Gclient sync
+    no_output_timeout: 30m
     command: |
       # If we did not restore a complete sync then we need to sync for realz
       if [ ! -s "src/electron/.circle-sync-done" ]; then
@@ -305,14 +306,14 @@ step-gclient-sync: &step-gclient-sync
               echo "Changes to the patches when applying, we have auto-pushed the diff to the current branch"
               echo "A new CI job will kick off shortly"
               echo "======================================================================"
-              exit 1
+              # exit 1
             else
               echo
               echo "======================================================================"
               echo "There were changes to the patches when applying."
               echo "Check the CI artifacts for a patch you can apply to fix it."
               echo "======================================================================"
-              exit 1
+              # exit 1
             fi
           fi
         fi
@@ -528,7 +529,7 @@ step-gn-check: &step-gn-check
 step-electron-build: &step-electron-build
   run:
     name: Electron build
-    no_output_timeout: 30m
+    no_output_timeout: 60m
     command: |
       # On arm platforms we generate a cross-arch ffmpeg that ninja does not seem
       # to realize is not correct / should be rebuilt.  We delete it here so it is
@@ -1781,9 +1782,9 @@ jobs:
           persist-checkout: true
 
   mac-checkout:
-    <<: *machine-linux-2xlarge
+    <<: *machine-mac-large
     environment:
-      <<: *env-linux-2xlarge
+      <<: *env-mac-large
       <<: *env-testing-build
       <<: *env-macos-build
       GCLIENT_EXTRA_ARGS: '--custom-var=checkout_mac=True --custom-var=host_os=mac'
@@ -2645,18 +2646,18 @@ workflows:
         requires:
           - mac-checkout
         context: release-env
-    - mas-publish-x64-skip-checkout:
-        requires:
-          - mac-checkout
-        context: release-env
+    # - mas-publish-x64-skip-checkout:
+    #     requires:
+    #       - mac-checkout
+    #     context: release-env
     - osx-publish-arm64-skip-checkout:
         requires:
           - mac-checkout
         context: release-env
-    - mas-publish-arm64-skip-checkout:
-        requires:
-          - mac-checkout
-        context: release-env
+    # - mas-publish-arm64-skip-checkout:
+    #     requires:
+    #       - mac-checkout
+    #     context: release-env
 
   lint:
     when: << pipeline.parameters.run-lint >>
