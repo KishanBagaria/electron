@@ -74,7 +74,7 @@ new Promise((resolve, reject) => {
     );
 
     return octokit.repos.listReleases({
-      owner: 'electron',
+      owner: 'kishanbagaria',
       repo: rootPackageJson.version.indexOf('nightly') > 0 ? 'nightlies' : 'electron'
     });
   })

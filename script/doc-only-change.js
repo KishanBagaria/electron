@@ -14,7 +14,7 @@ async function checkIfDocOnlyChange () {
         } else if (args.prBranch) {
           // AppVeyor doesn't provide a PR number for branch builds - figure it out from the branch
           const prsForBranch = await octokit.pulls.list({
-            owner: 'electron',
+            owner: 'kishanbagaria',
             repo: 'electron',
             state: 'open',
             head: `electron:${args.prBranch}`
@@ -28,7 +28,7 @@ async function checkIfDocOnlyChange () {
         }
       }
       const filesChanged = await octokit.paginate(octokit.pulls.listFiles.endpoint.merge({
-        owner: 'electron',
+        owner: 'kishanbagaria',
         repo: 'electron',
         pull_number: pullRequestNumber,
         per_page: 100

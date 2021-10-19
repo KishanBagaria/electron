@@ -59,7 +59,7 @@ class Commit {
     this.note = null; // string
 
     // A set of branches to which this change has been merged.
-    // '8-x-y' => GHKey { owner: 'electron', repo: 'electron', number: 23714 }
+    // '8-x-y' => GHKey { owner: 'kishanbagaria', repo: 'electron', number: 23714 }
     this.trops = new Map(); // Map<string,GHKey>
 
     this.prKeys = new Set(); // GHKey
@@ -402,7 +402,7 @@ const getNotes = async (fromRef, toRef, newVersion) => {
   console.log(`Generating release notes between '${fromRef}' and '${toRef}' for version '${newVersion}' in branch '${toBranch}'`);
 
   // get the electron/electron commits
-  const electron = { owner: 'electron', repo: 'electron', dir: ELECTRON_DIR };
+  const electron = { owner: 'kishanbagaria', repo: 'electron', dir: ELECTRON_DIR };
   await addRepoToPool(pool, electron, fromRef, toRef);
 
   // remove any old commits
