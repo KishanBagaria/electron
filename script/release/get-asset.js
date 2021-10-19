@@ -8,7 +8,7 @@ const octokit = new Octokit({
 
 async function getAssetContents (repo, assetId) {
   const requestOptions = octokit.repos.getReleaseAsset.endpoint({
-    owner: 'electron',
+    owner: 'kishanbagaria',
     repo,
     asset_id: assetId,
     headers: {
