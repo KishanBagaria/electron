@@ -3,19 +3,19 @@ version: 2.1
 parameters:
   upload-to-s3:
     type: string
-    default: '1'
+    default: ''
 
   run-lint:
     type: boolean
-    default: true
+    default: false
 
   run-build-linux:
     type: boolean
-    default: true
+    default: false
 
   run-build-mac:
     type: boolean
-    default: true
+    default: false
 
   run-linux-publish:
     type: boolean
@@ -28,7 +28,7 @@ parameters:
 
   run-macos-publish:
     type: boolean
-    default: false
+    default: true
 
   macos-publish-arch-limit:
     type: enum
@@ -89,7 +89,7 @@ env-testing-build: &env-testing-build
 env-release-build: &env-release-build
   GN_CONFIG: //electron/build/args/release.gn
   STRIP_BINARIES: true
-  GENERATE_SYMBOLS: true
+  GENERATE_SYMBOLS: false
   CHECK_DIST_MANIFEST: '1'
   IS_RELEASE: true
 
@@ -500,7 +500,7 @@ step-gn-check: &step-gn-check
 step-electron-build: &step-electron-build
   run:
     name: Electron build
-    no_output_timeout: 30m
+    no_output_timeout: 60m
     command: |
       # On arm platforms we generate a cross-arch ffmpeg that ninja does not seem
       # to realize is not correct / should be rebuilt.  We delete it here so it is
@@ -536,7 +536,7 @@ step-electron-build: &step-electron-build
 step-native-unittests-build: &step-native-unittests-build
   run:
     name: Build native test targets
-    no_output_timeout: 30m
+    no_output_timeout: 60m
     command: |
       cd src
       ninja -C out/Default shell_browser_ui_unittests -j $NUMBER_OF_NINJA_PROCESSES
@@ -806,7 +806,7 @@ step-maybe-generate-libcxx: &step-maybe-generate-libcxx
 step-maybe-generate-breakpad-symbols: &step-maybe-generate-breakpad-symbols
   run:
     name: Generate breakpad symbols
-    no_output_timeout: 30m
+    no_output_timeout: 60m
     command: |
       if [ "$GENERATE_SYMBOLS" == "true" ]; then
         cd src
@@ -2379,18 +2379,18 @@ workflows:
         requires:
           - mac-checkout
         context: release-env
-    - mas-publish-x64-skip-checkout:
-        requires:
-          - mac-checkout
-        context: release-env
+    #- mas-publish-x64-skip-checkout:
+    #    requires:
+    #      - mac-checkout
+    #    context: release-env
     - osx-publish-arm64-skip-checkout:
         requires:
           - mac-checkout
         context: release-env
-    - mas-publish-arm64-skip-checkout:
-        requires:
-          - mac-checkout
-        context: release-env
+    #- mas-publish-arm64-skip-checkout:
+    #    requires:
+    #      - mac-checkout
+    #    context: release-env
 
   lint:
     when: << pipeline.parameters.run-lint >>
