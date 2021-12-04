@@ -52,9 +52,9 @@ executors:
     parameters:
       size:
         description: "macOS executor size"
-        default: large
+        default: medium
         type: enum
-        enum: ["medium", "large"]
+        enum: ["medium"]
     macos:
       xcode: "12.4.0"
     resource_class: << parameters.size >>
